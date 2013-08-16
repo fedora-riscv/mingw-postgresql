@@ -35,7 +35,7 @@ BuildRequires:  mingw64-readline
 BuildRequires:  mingw64-tcl
 BuildRequires:  mingw64-zlib
 
-BuildRequires:  bison flex gettext pkgconfig
+BuildRequires:  bison flex gettext pkgconfig tcl
 
 
 %description
