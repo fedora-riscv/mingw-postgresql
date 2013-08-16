@@ -17,6 +17,7 @@ BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw32-binutils
 BuildRequires:  mingw32-gettext
+BuildRequires:  mingw32-icu
 BuildRequires:  mingw32-libxml2
 BuildRequires:  mingw32-libxslt
 BuildRequires:  mingw32-openssl
@@ -28,6 +29,7 @@ BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc
 BuildRequires:  mingw64-binutils
 BuildRequires:  mingw64-gettext
+BuildRequires:  mingw64-icu
 BuildRequires:  mingw64-libxml2
 BuildRequires:  mingw64-libxslt
 BuildRequires:  mingw64-openssl
