@@ -2,30 +2,40 @@
 
 Name:           mingw-postgresql
 Version:        9.2.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+# Use Windows error codes in checking connection state, sent upstream
+Patch100:       postgresql-mingw-errno.patch
 
 BuildArch:      noarch
 
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw32-binutils
+BuildRequires:  mingw32-gettext
+BuildRequires:  mingw32-libxml2
+BuildRequires:  mingw32-libxslt
 BuildRequires:  mingw32-openssl
+BuildRequires:  mingw32-tcl
 BuildRequires:  mingw32-readline
 BuildRequires:  mingw32-zlib
 
 BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc
 BuildRequires:  mingw64-binutils
+BuildRequires:  mingw64-gettext
+BuildRequires:  mingw64-libxml2
+BuildRequires:  mingw64-libxslt
 BuildRequires:  mingw64-openssl
 BuildRequires:  mingw64-readline
+BuildRequires:  mingw64-tcl
 BuildRequires:  mingw64-zlib
 
-BuildRequires:  bison flex pkgconfig
+BuildRequires:  bison flex gettext pkgconfig tcl
 
 
 %description
@@ -55,11 +65,34 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
+%patch100 -p1 -b .mingw-errno
 
 
 %build
-%mingw_configure \
-    --with-openssl
+mkdir build_win32
+pushd build_win32
+%mingw32_configure \
+    --with-openssl \
+    --enable-thread-safety \
+    --enable-integer-datetimes \
+    --enable-nls \
+    --with-ldap \
+    --with-libxml \
+    --with-libxslt \
+    --with-tcl --with-tclconfig=/usr/i686-w64-mingw32/sys-root/mingw/lib
+popd
+mkdir build_win64
+pushd build_win64
+%mingw64_configure \
+    --with-openssl \
+    --enable-thread-safety \
+    --enable-integer-datetimes \
+    --enable-nls \
+    --with-ldap \
+    --with-libxml \
+    --with-libxslt \
+    --with-tcl --with-tclconfig=/usr/x86_64-w64-mingw32/sys-root/mingw/lib
+popd
 # Make DLL definition file visible during each arch build
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/libpq/libpqdll.def ./build_win32/src/interfaces/libpq/
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/libpq/libpqdll.def ./build_win64/src/interfaces/libpq/
@@ -92,6 +125,8 @@ rm $RPM_BUILD_ROOT%{mingw32_bindir}/pgevent.dll
 rm $RPM_BUILD_ROOT%{mingw64_bindir}/pgevent.dll
 
 # remove server support files
+rm -rf $RPM_BUILD_ROOT%{mingw32_bindir}/pltcl*
+rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
@@ -156,6 +191,10 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Thu Aug 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-2
+- Enable NLS, LDAP, TCL, and XML features.
+- Patch for Windows error checking (RHBZ# 996529)
+
 * Mon Jul 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-1
 - Initial RPM release
 
