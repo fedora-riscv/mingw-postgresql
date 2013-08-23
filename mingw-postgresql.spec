@@ -2,14 +2,14 @@
 
 Name:           mingw-postgresql
 Version:        9.2.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
-# Use Windows error codes in checking connection state, sent upstream
-Patch100:       postgresql-mingw-errno.patch
+# Use Windows error codes in checking connection state, from upstream master branch
+Patch100:       postgresql-mingw-errno-v2.patch
 
 BuildArch:      noarch
 
@@ -65,7 +65,7 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
-%patch100 -p1 -b .mingw-errno
+%patch100 -p1 -b .mingw-errno-v2
 
 
 %build
@@ -191,6 +191,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-3
+- Use upstream patch for Windows error checking
+
 * Thu Aug 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-2
 - Enable NLS, LDAP, TCL, and XML features.
 - Patch for Windows error checking (RHBZ# 996529)

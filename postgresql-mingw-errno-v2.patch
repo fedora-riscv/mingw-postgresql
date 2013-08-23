@@ -1,0 +1,72 @@
+From 73838b5251ec64d1c90d5df0d0be7a5c19cfae12 Mon Sep 17 00:00:00 2001
+From: Andrew Dunstan <andrew@dunslane.net>
+Date: Tue, 20 Aug 2013 14:11:36 -0400
+Subject: [PATCH 2/4] Unconditionally use the WSA equivalents of Socket error
+ constants.
+
+This change will only apply to mingw compilers, and has been found
+necessary by late versions of the mingw-w64 compiler. It's the same as
+what is done elsewhere for the Microsoft compilers.
+
+If this doesn't upset older compilers in the buildfarm, it will be
+backpatched to 9.1.
+
+Problem reported by Michael Cronenworth, although not his patch.
+---
+ src/include/port/win32.h | 30 ++++++++++--------------------
+ 1 file changed, 10 insertions(+), 20 deletions(-)
+
+diff --git a/src/include/port/win32.h b/src/include/port/win32.h
+index 3a68ea4..2c2d937 100644
+--- a/src/include/port/win32.h
++++ b/src/include/port/win32.h
+@@ -272,36 +272,26 @@ typedef int pid_t;
+ #undef EINTR
+ #define EINTR WSAEINTR
+ #define EAGAIN WSAEWOULDBLOCK
+-#ifndef EMSGSIZE
++#undef EMSGSIZE
+ #define EMSGSIZE WSAEMSGSIZE
+-#endif
+-#ifndef EAFNOSUPPORT
++#undef EAFNOSUPPORT
+ #define EAFNOSUPPORT WSAEAFNOSUPPORT
+-#endif
+-#ifndef EWOULDBLOCK
++#undef EWOULDBLOCK
+ #define EWOULDBLOCK WSAEWOULDBLOCK
+-#endif
+-#ifndef ECONNRESET
++#undef ECONNRESET
+ #define ECONNRESET WSAECONNRESET
+-#endif
+-#ifndef EINPROGRESS
++#undef EINPROGRESS
+ #define EINPROGRESS WSAEINPROGRESS
+-#endif
+-#ifndef ENOBUFS
++#undef ENOBUFS
+ #define ENOBUFS WSAENOBUFS
+-#endif
+-#ifndef EPROTONOSUPPORT
++#undef EPROTONOSUPPORT
+ #define EPROTONOSUPPORT WSAEPROTONOSUPPORT
+-#endif
+-#ifndef ECONNREFUSED
++#undef ECONNREFUSED
+ #define ECONNREFUSED WSAECONNREFUSED
+-#endif
+-#ifndef EBADFD
++#undef EBADFD
+ #define EBADFD WSAENOTSOCK
+-#endif
+-#ifndef EOPNOTSUPP
++#undef EOPNOTSUPP
+ #define EOPNOTSUPP WSAEOPNOTSUPP
+-#endif
+ 
+ /*
+  * For Microsoft Visual Studio 2010 and above we intentionally redefine
+-- 
+1.8.3.1
+
