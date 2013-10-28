@@ -1,8 +1,13 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
+<<<<<<< Updated upstream
 Version:        9.2.4
 Release:        3%{?dist}
+=======
+Version:        9.2.5
+Release:        1%{?dist}
+>>>>>>> Stashed changes
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -191,7 +196,14 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+<<<<<<< Updated upstream
 * Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-3
+=======
+* Mon Oct 28 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.5-1
+- New upstream release.
+
+* Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-4
+>>>>>>> Stashed changes
 - Use upstream patch for Windows error checking
 
 * Thu Aug 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-2
