@@ -8,8 +8,6 @@ Summary:        MinGW Windows PostgreSQL library
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
-# Use Windows error codes in checking connection state, from upstream master branch
-Patch100:       postgresql-mingw-errno-v2.patch
 
 BuildArch:      noarch
 
@@ -65,7 +63,6 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
-%patch100 -p1 -b .mingw-errno-v2
 
 
 %build
