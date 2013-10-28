@@ -127,6 +127,10 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
+# remove static libraries
+rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/libpgcommon*.a
+rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/libpgcommon*.a
+
 # rename import libraries
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.dll.a
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.dll.a
