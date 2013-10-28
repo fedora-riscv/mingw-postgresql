@@ -1,8 +1,8 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.2.4
-Release:        4%{?dist}
+Version:        9.3.1
+Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -165,6 +165,7 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw32_libdir}/libpgtypes.dll.a
 %{mingw32_libdir}/libpostgres.dll.a
 %{mingw32_libdir}/libpq.dll.a
+%{mingw32_libdir}/pkgconfig/*.pc
 
 
 # Win64
@@ -188,9 +189,13 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw64_libdir}/libpgtypes.dll.a
 %{mingw64_libdir}/libpostgres.dll.a
 %{mingw64_libdir}/libpq.dll.a
+%{mingw64_libdir}/pkgconfig/*.pc
 
 
 %changelog
+* Mon Oct 28 2013 Michael Cronenworth <mike@cchtml.com> - 9.3.1-1
+- Rebase to 9.3 branch.
+
 * Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-4
 - Use upstream patch for Windows error checking
 
