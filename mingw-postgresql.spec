@@ -1,7 +1,7 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.3.1
+Version:        9.3.2
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
@@ -13,7 +13,6 @@ BuildArch:      noarch
 
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
-BuildRequires:  mingw32-binutils
 BuildRequires:  mingw32-gettext
 BuildRequires:  mingw32-libxml2
 BuildRequires:  mingw32-libxslt
@@ -24,7 +23,6 @@ BuildRequires:  mingw32-zlib
 
 BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc
-BuildRequires:  mingw64-binutils
 BuildRequires:  mingw64-gettext
 BuildRequires:  mingw64-libxml2
 BuildRequires:  mingw64-libxslt
@@ -194,6 +192,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Tue Jan 07 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.2-1
+- New upstream release.
+
 * Mon Oct 28 2013 Michael Cronenworth <mike@cchtml.com> - 9.3.1-1
 - Rebase to 9.3 branch.
 
