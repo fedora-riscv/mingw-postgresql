@@ -1,8 +1,8 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.2.8
-Release:        1%{?dist}
+Version:        9.3.4
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -13,7 +13,6 @@ BuildArch:      noarch
 
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
-BuildRequires:  mingw32-binutils
 BuildRequires:  mingw32-gettext
 BuildRequires:  mingw32-libxml2
 BuildRequires:  mingw32-libxslt
@@ -24,7 +23,6 @@ BuildRequires:  mingw32-zlib
 
 BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc
-BuildRequires:  mingw64-binutils
 BuildRequires:  mingw64-gettext
 BuildRequires:  mingw64-libxml2
 BuildRequires:  mingw64-libxslt
@@ -127,6 +125,10 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
+# remove static libraries
+rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/libpgcommon*.a
+rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/libpgcommon*.a
+
 # rename import libraries
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.dll.a
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.dll.a
@@ -162,6 +164,7 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw32_libdir}/libpgtypes.dll.a
 %{mingw32_libdir}/libpostgres.dll.a
 %{mingw32_libdir}/libpq.dll.a
+%{mingw32_libdir}/pkgconfig/*.pc
 
 
 # Win64
@@ -185,24 +188,34 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw64_libdir}/libpgtypes.dll.a
 %{mingw64_libdir}/libpostgres.dll.a
 %{mingw64_libdir}/libpq.dll.a
+%{mingw64_libdir}/pkgconfig/*.pc
 
 
 %changelog
-* Tue Mar 25 2014 Michael Cronenworth <mike@cchtml.com> - 9.2.8-1
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 9.3.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Tue Mar 25 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.4-1
 - New upstream release.
 
-* Thu Mar 06 2014 Michael Cronenworth <mike@cchtml.com> - 9.2.7-1
+* Thu Mar 06 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.3-1
 - New upstream release.
 
-* Mon Oct 28 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.5-1
+* Tue Jan 07 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.2-1
 - New upstream release.
 
-* Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-3
+* Mon Oct 28 2013 Michael Cronenworth <mike@cchtml.com> - 9.3.1-1
+- Rebase to 9.3 branch.
+
+* Thu Aug 22 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-4
 - Use upstream patch for Windows error checking
 
-* Thu Aug 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-2
+* Thu Aug 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-3
 - Enable NLS, LDAP, TCL, and XML features.
 - Patch for Windows error checking (RHBZ# 996529)
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 9.2.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
 * Mon Jul 15 2013 Michael Cronenworth <mike@cchtml.com> - 9.2.4-1
 - Initial RPM release
