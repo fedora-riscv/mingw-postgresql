@@ -1,0 +1,11 @@
+--- src/backend/replication/libpqwalreceiver/Makefile.orig	2014-07-21 14:12:31.000000000 -0500
++++ src/backend/replication/libpqwalreceiver/Makefile	2014-08-16 22:02:03.022855535 -0500
+@@ -15,7 +15,7 @@
+ override CPPFLAGS := -I$(srcdir) -I$(libpq_srcdir) $(CPPFLAGS)
+ 
+ OBJS = libpqwalreceiver.o
+-SHLIB_LINK = $(libpq)
++SHLIB_LINK = $(libpq) ../../../../src/backend/access/transam/xlog.o ../../../../src/backend/access/transam/transam.o ../../../../src/backend/replication/walreceiverfuncs.o ../../../../src/backend/storage/ipc/procarray.o ../../../../src/backend/utils/error/elog.o -lintl
+ SHLIB_PREREQS = submake-libpq
+ NAME = libpqwalreceiver
+ 

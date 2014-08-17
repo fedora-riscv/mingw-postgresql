@@ -1,13 +1,18 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.2.8
+Version:        9.2.9
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+
+# DLL Linking of libpqwalreceiver.dll, libplpgsql.dll, pltcl.dll fails
+Patch0:         postgresql-9.2.9-pqwalreceiver-link.patch
+Patch1:         postgresql-9.2.9-plpgsql-link.patch
+Patch2:         postgresql-9.2.9-pltcl-link.patch
 
 BuildArch:      noarch
 
@@ -63,6 +68,9 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
+%patch0 -p0
+%patch1 -p0
+%patch2 -p0
 
 
 %build
@@ -188,6 +196,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Sat Aug 16 2014 Michael Cronenworth <mike@cchtml.com> - 9.2.9-1
+- New upstream release.
+
 * Tue Mar 25 2014 Michael Cronenworth <mike@cchtml.com> - 9.2.8-1
 - New upstream release.
 

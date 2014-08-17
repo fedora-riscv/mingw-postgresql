@@ -1,0 +1,11 @@
+--- src/pl/tcl/Makefile.orig	2014-07-21 14:12:31.000000000 -0500
++++ src/pl/tcl/Makefile	2014-08-16 22:24:16.167489330 -0500
+@@ -29,7 +29,7 @@
+ endif
+ 
+ 
+-SHLIB_LINK = $(TCL_LIB_SPEC)
++SHLIB_LINK = $(TCL_LIB_SPEC) ../../../src/backend/access/transam/xlog.o ../../../src/backend/access/transam/transam.o ../../../src/backend/replication/walreceiverfuncs.o ../../../src/backend/storage/ipc/procarray.o ../../../src/backend/utils/error/elog.o -lintl
+ ifneq ($(PORTNAME), win32)
+ SHLIB_LINK += $(TCL_LIBS) -lc
+ endif
