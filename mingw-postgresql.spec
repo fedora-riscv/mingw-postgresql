@@ -1,13 +1,16 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.3.4
-Release:        2%{?dist}
+Version:        9.3.5
+Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+
+# DLL Linking of libplpgsql.dll fails
+Patch0:         postgresql-9.3.5-plpgsql-link.patch
 
 BuildArch:      noarch
 
@@ -61,6 +64,7 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
+%patch0 -p0
 
 
 %build
@@ -192,6 +196,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Sat Aug 16 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.5-1
+- New upstream release.
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 9.3.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
