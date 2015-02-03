@@ -1,16 +1,16 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.3.5
+Version:        9.4.0
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
-Source0:        ftp://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+Source0:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
 
-# DLL Linking of libplpgsql.dll fails
-Patch0:         postgresql-9.3.5-plpgsql-link.patch
+# Allow linking to MinGW TCL DLL
+Patch0:         postgresql-9.4.0-mingw.patch
 
 BuildArch:      noarch
 
@@ -64,7 +64,7 @@ database management system (DBMS).
 
 %prep
 %setup -q -n postgresql-%{version}
-%patch0 -p0
+%patch0 -p1
 
 
 %build
@@ -119,10 +119,6 @@ rm $RPM_BUILD_ROOT%{mingw64_bindir}/*.exe
 rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/postgresql/
 rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/postgresql/
 
-# remove Event Log DLL, only useful for server
-rm $RPM_BUILD_ROOT%{mingw32_bindir}/pgevent.dll
-rm $RPM_BUILD_ROOT%{mingw64_bindir}/pgevent.dll
-
 # remove server support files
 rm -rf $RPM_BUILD_ROOT%{mingw32_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
@@ -149,7 +145,7 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 # Win32
 %files -n mingw32-postgresql
-%doc COPYRIGHT
+%license COPYRIGHT
 %{mingw32_bindir}/libecpg.dll
 %{mingw32_bindir}/libecpg_compat.dll
 %{mingw32_bindir}/libpgtypes.dll
@@ -173,7 +169,7 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 # Win64
 %files -n mingw64-postgresql
-%doc COPYRIGHT
+%license COPYRIGHT
 %{mingw64_bindir}/libecpg.dll
 %{mingw64_bindir}/libecpg_compat.dll
 %{mingw64_bindir}/libpgtypes.dll
@@ -196,6 +192,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Tue Feb 03 2015 Michael Cronenworth <mike@cchtml.com> - 9.4.0-1
+- New upstream release.
+
 * Sat Aug 16 2014 Michael Cronenworth <mike@cchtml.com> - 9.3.5-1
 - New upstream release.
 
