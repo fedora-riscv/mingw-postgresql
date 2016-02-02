@@ -10,7 +10,7 @@
 +endif
  endif
  
- 
+ PGFILEDESC = "PL/Tcl - procedural language"
 @@ -51,6 +55,7 @@
  # which are not compatible with mingw gcc. Therefore we need to build a
  # new import library to link with.
