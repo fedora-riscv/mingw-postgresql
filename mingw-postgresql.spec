@@ -1,7 +1,7 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.5.0
+Version:        9.5.2
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
@@ -192,6 +192,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Thu Apr 14 2016 Michael Cronenworth <mike@cchtml.com> - 9.5.2-1
+- New upstream release.
+
 * Tue Feb 02 2016 Michael Cronenworth <mike@cchtml.com> - 9.5.0-1
 - New upstream release.
 
