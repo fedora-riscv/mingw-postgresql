@@ -27,7 +27,7 @@
  endif # win32
  
  
-@@ -117,6 +123,8 @@
+@@ -104,8 +104,10 @@
  	rm -f $(OBJS)
  	rm -rf $(pg_regress_clean_files)
  ifeq ($(PORTNAME), win32)
@@ -36,3 +36,5 @@
  endif
 +endif
  	$(MAKE) -C modules $@
+ 
+ maintainer-clean: distclean

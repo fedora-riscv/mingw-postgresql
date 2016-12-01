@@ -1,7 +1,7 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.5.4
+Version:        9.6.1
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
@@ -50,6 +50,13 @@ Summary:        MinGW Windows PostgreSQL library
 MinGW Windows copy of PostgreSQL. PostgreSQL is an advanced Object-Relational
 database management system (DBMS).
 
+%package -n mingw32-postgresql-static
+Summary:        Static libraries for MinGW PostgreSQL
+Requires:       mingw32-postgresql = %{version}-%{release}
+
+%description -n mingw32-postgresql-static
+%{summary}
+
 # Win64
 %package -n mingw64-postgresql
 Summary:        MinGW Windows PostgreSQL library
@@ -57,6 +64,13 @@ Summary:        MinGW Windows PostgreSQL library
 %description -n mingw64-postgresql
 MinGW Windows copy of PostgreSQL. PostgreSQL is an advanced Object-Relational
 database management system (DBMS).
+
+%package -n mingw64-postgresql-static
+Summary:        Static libraries for MinGW PostgreSQL
+Requires:       mingw64-postgresql = %{version}-%{release}
+
+%description -n mingw64-postgresql-static
+%{summary}
 
 
 %?mingw_debug_package
@@ -125,22 +139,14 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
-# remove static libraries
-rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/libpgcommon*.a
-rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/libpgcommon*.a
-
 # rename import libraries
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.dll.a
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.dll.a
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpgport.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpgport.dll.a
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpgtypes.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpgtypes.dll.a
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpostgres.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpostgres.dll.a
 mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpq.dll.a
 mv $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg.dll.a
 mv $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg_compat.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpgport.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpgport.dll.a
 mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpgtypes.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpgtypes.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpostgres.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpostgres.dll.a
 mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.dll.a
 
 # Win32
@@ -160,11 +166,16 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw32_includedir}/sql*.h
 %{mingw32_libdir}/libecpg.dll.a
 %{mingw32_libdir}/libecpg_compat.dll.a
-%{mingw32_libdir}/libpgport.dll.a
 %{mingw32_libdir}/libpgtypes.dll.a
-%{mingw32_libdir}/libpostgres.dll.a
 %{mingw32_libdir}/libpq.dll.a
 %{mingw32_libdir}/pkgconfig/*.pc
+
+
+%files -n mingw32-postgresql-static
+%{mingw32_libdir}/libpgcommon.a
+%{mingw32_libdir}/libpgfeutils.a
+%{mingw32_libdir}/libpgport.a
+%{mingw32_libdir}/libpostgres.a
 
 
 # Win64
@@ -184,14 +195,22 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 %{mingw64_includedir}/sql*.h
 %{mingw64_libdir}/libecpg.dll.a
 %{mingw64_libdir}/libecpg_compat.dll.a
-%{mingw64_libdir}/libpgport.dll.a
 %{mingw64_libdir}/libpgtypes.dll.a
-%{mingw64_libdir}/libpostgres.dll.a
 %{mingw64_libdir}/libpq.dll.a
 %{mingw64_libdir}/pkgconfig/*.pc
 
 
+%files -n mingw64-postgresql-static
+%{mingw64_libdir}/libpgcommon.a
+%{mingw64_libdir}/libpgfeutils.a
+%{mingw64_libdir}/libpgport.a
+%{mingw64_libdir}/libpostgres.a
+
+
 %changelog
+* Thu Dec 01 2016 Michael Cronenworth <mike@cchtml.com> - 9.6.1-1
+- New upstream release.
+
 * Wed Sep 21 2016 Michael Cronenworth <mike@cchtml.com> - 9.5.4-1
 - New upstream release.
 
