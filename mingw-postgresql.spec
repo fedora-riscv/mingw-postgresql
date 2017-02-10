@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        9.6.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -208,6 +208,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 9.6.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Thu Dec 01 2016 Michael Cronenworth <mike@cchtml.com> - 9.6.1-1
 - New upstream release.
 
