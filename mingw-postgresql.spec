@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        9.6.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -208,6 +208,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Fri Aug 11 2017 Kalev Lember <klember@redhat.com> - 9.6.4-2
+- Bump and rebuild for an rpm signing issue
+
 * Thu Aug 10 2017 Michael Cronenworth <mike@cchtml.com> - 9.6.4-1
 - New upstream release. (CVE-2017-7546 CVE-2017-7547 CVE-2017-7548)
 
