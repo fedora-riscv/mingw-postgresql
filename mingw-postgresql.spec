@@ -1,8 +1,8 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        9.6.4
-Release:        2%{?dist}
+Version:        10.0
+Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -10,7 +10,7 @@ URL:            http://www.postgresql.org/
 Source0:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
 
 # Allow linking to MinGW TCL DLL
-Patch0:         postgresql-9.4.0-mingw.patch
+Patch0:         postgresql-10.0-mingw.patch
 
 BuildArch:      noarch
 
@@ -208,6 +208,10 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Sat Nov 04 2017 Michael Cronenworth <mike@cchtml.com> - 10.0-1
+- New upstream release.
+  https://www.postgresql.org/docs/10/static/release-10.html
+
 * Fri Aug 11 2017 Kalev Lember <klember@redhat.com> - 9.6.4-2
 - Bump and rebuild for an rpm signing issue
 
