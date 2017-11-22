@@ -1,7 +1,7 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        10.0
+Version:        10.1
 Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
@@ -208,6 +208,10 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Wed Nov 22 2017 Michael Cronenworth <mike@cchtml.com> - 10.1-1
+- New upstream release.
+  https://www.postgresql.org/docs/10/static/release-10-1.html
+
 * Sat Nov 04 2017 Michael Cronenworth <mike@cchtml.com> - 10.0-1
 - New upstream release.
   https://www.postgresql.org/docs/10/static/release-10.html
