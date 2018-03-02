@@ -1,13 +1,14 @@
 %?mingw_package_header
 
 Name:           mingw-postgresql
-Version:        10.1
-Release:        2%{?dist}
+Version:        10.3
+Release:        1%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
 URL:            http://www.postgresql.org/
 Source0:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
+Source1:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2.sha256
 
 # Allow linking to MinGW TCL DLL
 Patch0:         postgresql-10.0-mingw.patch
@@ -208,6 +209,10 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Fri Mar 02 2018 Michael Cronenworth <mike@cchtml.com> - 10.3-1
+- New upstream release.
+  https://www.postgresql.org/docs/10/static/release-10-3.html
+
 * Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 10.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
