@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        10.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -209,6 +209,9 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 10.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Fri Mar 02 2018 Michael Cronenworth <mike@cchtml.com> - 10.3-1
 - New upstream release.
   https://www.postgresql.org/docs/10/static/release-10-3.html
