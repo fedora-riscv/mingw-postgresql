@@ -1,0 +1,34 @@
+From 6e0b9e2a8ea761d712788e5f178d53cecf54382e Mon Sep 17 00:00:00 2001
+From: Sandro Mani <manisandro@gmail.com>
+Date: Thu, 7 Mar 2019 14:49:35 +0100
+Subject: [PATCH 2/2] Build static libraries
+
+---
+ src/Makefile.shlib | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/Makefile.shlib b/src/Makefile.shlib
+index aeaa46e89b..2b8c7ddc2b 100644
+--- a/src/Makefile.shlib
++++ b/src/Makefile.shlib
+@@ -383,11 +383,17 @@ $(stlib): $(shlib)
+ # Else we just use --export-all-symbols.
+ ifeq (,$(SHLIB_EXPORTS))
+ $(shlib): $(OBJS) | $(SHLIB_PREREQS)
++	rm -f $(stlib)
++	$(LINK.static) $(stlib) $(OBJS)
++	$(RANLIB) $(stlib)
+ 	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=lib$(NAME).dll.a
+ else
+ DLL_DEFFILE = lib$(NAME)dll.def
+ 
+ $(shlib): $(OBJS) $(DLL_DEFFILE) | $(SHLIB_PREREQS)
++	rm -f $(stlib)
++	$(LINK.static) $(stlib) $(OBJS)
++	$(RANLIB) $(stlib)
+ 	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(DLL_DEFFILE) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--out-implib=lib$(NAME).dll.a
+ endif
+ 
+-- 
+2.21.0
+

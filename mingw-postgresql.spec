@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        11.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -12,6 +12,10 @@ Source1:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{v
 
 # Allow linking to MinGW TCL DLL
 Patch0:         postgresql-10.0-mingw.patch
+# https://www.postgresql.org/message-id/2a6c418e-373b-8466-fcb8-ce729aab255f@gmail.com
+Patch1:         postgresql-11.2-import-name.patch
+# https://www.postgresql.org/message-id/2a6c418e-373b-8466-fcb8-ce729aab255f@gmail.com
+Patch2:         postgresql-11.2-static-libraries.patch
 
 BuildArch:      noarch
 
@@ -80,6 +84,8 @@ Requires:       mingw64-postgresql = %{version}-%{release}
 %prep
 %setup -q -n postgresql-%{version}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 
 %build
@@ -134,21 +140,16 @@ rm $RPM_BUILD_ROOT%{mingw64_bindir}/*.exe
 rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/postgresql/
 rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/postgresql/
 
+# libpostgres.dll.a is just the import library for postgres.exe, delete it
+rm -f $RPM_BUILD_ROOT%{mingw32_libdir}/libpostgres.{a,dll.a}
+rm -f $RPM_BUILD_ROOT%{mingw64_libdir}/libpostgres.{a,dll.a}
+
 # remove server support files
 rm -rf $RPM_BUILD_ROOT%{mingw32_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
-# rename import libraries
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg.dll.a
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw32_libdir}/libecpg_compat.dll.a
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpgtypes.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpgtypes.dll.a
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw32_libdir}/libpq.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg.a $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg_compat.a $RPM_BUILD_ROOT%{mingw64_libdir}/libecpg_compat.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpgtypes.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpgtypes.dll.a
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.dll.a
 
 # Win32
 %files -n mingw32-postgresql
@@ -173,10 +174,13 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %files -n mingw32-postgresql-static
+%{mingw32_libdir}/libecpg.a
+%{mingw32_libdir}/libecpg_compat.a
+%{mingw32_libdir}/libpq.a
 %{mingw32_libdir}/libpgcommon.a
 %{mingw32_libdir}/libpgfeutils.a
 %{mingw32_libdir}/libpgport.a
-%{mingw32_libdir}/libpostgres.a
+%{mingw32_libdir}/libpgtypes.a
 
 
 # Win64
@@ -202,13 +206,19 @@ mv $RPM_BUILD_ROOT%{mingw64_libdir}/libpq.a $RPM_BUILD_ROOT%{mingw64_libdir}/lib
 
 
 %files -n mingw64-postgresql-static
+%{mingw64_libdir}/libecpg.a
+%{mingw64_libdir}/libecpg_compat.a
+%{mingw64_libdir}/libpq.a
 %{mingw64_libdir}/libpgcommon.a
 %{mingw64_libdir}/libpgfeutils.a
 %{mingw64_libdir}/libpgport.a
-%{mingw64_libdir}/libpostgres.a
+%{mingw64_libdir}/libpgtypes.a
 
 
 %changelog
+* Tue Apr 16 2019 Michael Cronenworth <mike@cchtml.com> - 11.2-2
+- Add patches to release proper static libraries.
+
 * Sun Feb 17 2019 Michael Cronenworth <mike@cchtml.com> - 11.2-1
 - New upstream release.
 
