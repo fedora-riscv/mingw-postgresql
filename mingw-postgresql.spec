@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        11.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -16,6 +16,13 @@ Patch0:         postgresql-10.0-mingw.patch
 Patch1:         postgresql-11.2-import-name.patch
 # https://www.postgresql.org/message-id/2a6c418e-373b-8466-fcb8-ce729aab255f@gmail.com
 Patch2:         postgresql-11.2-static-libraries.patch
+# Use winpthreads directly instead of internal reimplementation
+# It causes multiple definition errors if linked together with something that pulls in winpthreads
+Patch3:         postgresql_pthread.patch
+# Keep/add some libraries in SHLIB_LINK as eventually passed to the pkgconfig Libs.private:
+# - libz, required by libcrypto
+# - libiconv, required by libintl
+Patch4:         postgresql_libs.patch
 
 BuildArch:      noarch
 
@@ -27,6 +34,7 @@ BuildRequires:  mingw32-libxslt
 BuildRequires:  mingw32-openssl
 BuildRequires:  mingw32-tcl
 BuildRequires:  mingw32-readline
+BuildRequires:  mingw32-winpthreads
 BuildRequires:  mingw32-zlib
 
 BuildRequires:  mingw64-filesystem >= 95
@@ -37,6 +45,7 @@ BuildRequires:  mingw64-libxslt
 BuildRequires:  mingw64-openssl
 BuildRequires:  mingw64-readline
 BuildRequires:  mingw64-tcl
+BuildRequires:  mingw64-winpthreads
 BuildRequires:  mingw64-zlib
 
 BuildRequires:  bison flex gettext pkgconfig tcl
@@ -86,6 +95,8 @@ Requires:       mingw64-postgresql = %{version}-%{release}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 
 %build
@@ -216,6 +227,10 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
 
 %changelog
+* Sun Apr 05 2020 Sandro Mani <manisandro@gmail.com> - 11.5-3
+- Use winpthreads directly instead of internal reimplementation
+- Add missing libraries to Libs.private of libpq.pc
+
 * Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 11.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 

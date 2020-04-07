@@ -1,0 +1,85 @@
+diff -rupN postgresql-11.5/src/interfaces/ecpg/ecpglib/misc.c postgresql-11.5-new/src/interfaces/ecpg/ecpglib/misc.c
+--- postgresql-11.5/src/interfaces/ecpg/ecpglib/misc.c	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/ecpg/ecpglib/misc.c	2020-04-05 16:17:13.172289655 +0200
+@@ -449,7 +449,7 @@ ECPGis_noind_null(enum ECPGttype type, c
+ 	return false;
+ }
+ 
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #ifdef ENABLE_THREAD_SAFETY
+ 
+ void
+diff -rupN postgresql-11.5/src/interfaces/ecpg/include/ecpg-pthread-win32.h postgresql-11.5-new/src/interfaces/ecpg/include/ecpg-pthread-win32.h
+--- postgresql-11.5/src/interfaces/ecpg/include/ecpg-pthread-win32.h	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/ecpg/include/ecpg-pthread-win32.h	2020-04-05 14:29:17.451865336 +0200
+@@ -7,7 +7,7 @@
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+ 
+-#ifndef WIN32
++#ifndef _MSC_VER
+ 
+ #include <pthread.h>
+ #else
+diff -rupN postgresql-11.5/src/interfaces/libpq/fe-connect.c postgresql-11.5-new/src/interfaces/libpq/fe-connect.c
+--- postgresql-11.5/src/interfaces/libpq/fe-connect.c	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/libpq/fe-connect.c	2020-04-05 14:28:56.994830965 +0200
+@@ -50,7 +50,7 @@
+ #endif
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN postgresql-11.5/src/interfaces/libpq/fe-secure.c postgresql-11.5-new/src/interfaces/libpq/fe-secure.c
+--- postgresql-11.5/src/interfaces/libpq/fe-secure.c	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/libpq/fe-secure.c	2020-04-05 14:29:05.770845025 +0200
+@@ -48,7 +48,7 @@
+ #include <sys/stat.h>
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN postgresql-11.5/src/interfaces/libpq/fe-secure-openssl.c postgresql-11.5-new/src/interfaces/libpq/fe-secure-openssl.c
+--- postgresql-11.5/src/interfaces/libpq/fe-secure-openssl.c	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/libpq/fe-secure-openssl.c	2020-04-05 14:29:02.801840153 +0200
+@@ -47,7 +47,7 @@
+ #include <sys/stat.h>
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN postgresql-11.5/src/interfaces/libpq/libpq-int.h postgresql-11.5-new/src/interfaces/libpq/libpq-int.h
+--- postgresql-11.5/src/interfaces/libpq/libpq-int.h	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/libpq/libpq-int.h	2020-04-05 14:27:48.623758799 +0200
+@@ -29,7 +29,7 @@
+ #endif
+ 
+ #ifdef ENABLE_THREAD_SAFETY
+-#ifdef WIN32
++#ifdef _MSC_VER
+ #include "pthread-win32.h"
+ #else
+ #include <pthread.h>
+diff -rupN postgresql-11.5/src/interfaces/libpq/Makefile postgresql-11.5-new/src/interfaces/libpq/Makefile
+--- postgresql-11.5/src/interfaces/libpq/Makefile	2019-08-05 23:14:59.000000000 +0200
++++ postgresql-11.5-new/src/interfaces/libpq/Makefile	2020-04-05 18:16:00.419275264 +0200
+@@ -68,9 +68,6 @@ OBJS += pgsleep.o win32.o libpqrc.o
+ libpqrc.o: libpq.rc
+ 	$(WINDRES) -i $< -o $@
+ 
+-ifeq ($(enable_thread_safety), yes)
+-OBJS += pthread-win32.o
+-endif
+ endif
+ 
+ 
