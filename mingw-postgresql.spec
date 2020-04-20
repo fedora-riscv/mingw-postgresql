@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        11.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -227,6 +227,9 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
 
 %changelog
+* Mon Apr 20 2020 Sandro Mani <manisandro@gmail.com> - 11.5-4
+- Rebuild (gettext)
+
 * Sun Apr 05 2020 Sandro Mani <manisandro@gmail.com> - 11.5-3
 - Use winpthreads directly instead of internal reimplementation
 - Add missing libraries to Libs.private of libpq.pc
