@@ -26,6 +26,7 @@ Patch4:         postgresql_libs.patch
 
 BuildArch:      noarch
 
+BuildRequires: make
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw32-gettext
