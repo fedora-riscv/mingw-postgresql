@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        11.5
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -228,6 +228,9 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
 
 %changelog
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 11.5-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 11.5-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
