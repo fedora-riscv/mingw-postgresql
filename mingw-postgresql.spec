@@ -1,8 +1,8 @@
-%?mingw_package_header
+%{?mingw_package_header}
 
 Name:           mingw-postgresql
 Version:        11.5
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -20,7 +20,7 @@ Patch2:         postgresql-11.2-static-libraries.patch
 # It causes multiple definition errors if linked together with something that pulls in winpthreads
 Patch3:         postgresql_pthread.patch
 # Keep/add some libraries in SHLIB_LINK as eventually passed to the pkgconfig Libs.private:
-# - libz, required by libcrypto
+# - libz, libpathcch, required by libcrypto
 # - libiconv, required by libintl
 Patch4:         postgresql_libs.patch
 
@@ -88,22 +88,17 @@ Requires:       mingw64-postgresql = %{version}-%{release}
 %{summary}
 
 
-%?mingw_debug_package
+%{?mingw_debug_package}
 
 
 %prep
-%setup -q -n postgresql-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+%autosetup -p1 -n postgresql-%{version}
 
 
 %build
-mkdir build_win32
-pushd build_win32
-%mingw32_configure \
+MINGW32_CONFIGURE_ARGS=--with-tclconfig=%{mingw32_libdir} \
+MINGW64_CONFIGURE_ARGS=--with-tclconfig=%{mingw64_libdir} \
+%mingw_configure \
     --with-openssl \
     --enable-thread-safety \
     --enable-integer-datetimes \
@@ -111,20 +106,7 @@ pushd build_win32
     --with-ldap \
     --with-libxml \
     --with-libxslt \
-    --with-tcl --with-tclconfig=/usr/i686-w64-mingw32/sys-root/mingw/lib
-popd
-mkdir build_win64
-pushd build_win64
-%mingw64_configure \
-    --with-openssl \
-    --enable-thread-safety \
-    --enable-integer-datetimes \
-    --enable-nls \
-    --with-ldap \
-    --with-libxml \
-    --with-libxslt \
-    --with-tcl --with-tclconfig=/usr/x86_64-w64-mingw32/sys-root/mingw/lib
-popd
+    --with-tcl
 # Make DLL definition file visible during each arch build
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/libpq/libpqdll.def ./build_win32/src/interfaces/libpq/
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/libpq/libpqdll.def ./build_win64/src/interfaces/libpq/
@@ -134,33 +116,31 @@ ln -s %{_builddir}/%{buildsubdir}/src/interfaces/ecpg/pgtypeslib/libpgtypesdll.d
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/ecpg/pgtypeslib/libpgtypesdll.def ./build_win64/src/interfaces/ecpg/pgtypeslib/
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/ecpg/compatlib/libecpg_compatdll.def ./build_win32/src/interfaces/ecpg/compatlib/
 ln -s %{_builddir}/%{buildsubdir}/src/interfaces/ecpg/compatlib/libecpg_compatdll.def ./build_win64/src/interfaces/ecpg/compatlib/
-%mingw_make %{?_smp_mflags}
+%mingw_make_build
 
 
 %install
-%mingw_make install DESTDIR=$RPM_BUILD_ROOT
+%mingw_make_install
 
 # move DLLs to bin
-mv $RPM_BUILD_ROOT%{mingw32_libdir}/*.dll \
-   $RPM_BUILD_ROOT%{mingw32_bindir}
-mv $RPM_BUILD_ROOT%{mingw64_libdir}/*.dll \
-   $RPM_BUILD_ROOT%{mingw64_bindir}
+mv %{buildroot}%{mingw32_libdir}/*.dll %{buildroot}%{mingw32_bindir}
+mv %{buildroot}%{mingw64_libdir}/*.dll %{buildroot}%{mingw64_bindir}
 
 # due to Fedora packaging policy, delete executables
-rm $RPM_BUILD_ROOT%{mingw32_bindir}/*.exe
-rm $RPM_BUILD_ROOT%{mingw64_bindir}/*.exe
-rm -rf $RPM_BUILD_ROOT%{mingw32_libdir}/postgresql/
-rm -rf $RPM_BUILD_ROOT%{mingw64_libdir}/postgresql/
+rm %{buildroot}%{mingw32_bindir}/*.exe
+rm %{buildroot}%{mingw64_bindir}/*.exe
+rm -rf %{buildroot}%{mingw32_libdir}/postgresql/
+rm -rf %{buildroot}%{mingw64_libdir}/postgresql/
 
 # libpostgres.dll.a is just the import library for postgres.exe, delete it
-rm -f $RPM_BUILD_ROOT%{mingw32_libdir}/libpostgres.{a,dll.a}
-rm -f $RPM_BUILD_ROOT%{mingw64_libdir}/libpostgres.{a,dll.a}
+rm -f %{buildroot}%{mingw32_libdir}/libpostgres.{a,dll.a}
+rm -f %{buildroot}%{mingw64_libdir}/libpostgres.{a,dll.a}
 
 # remove server support files
-rm -rf $RPM_BUILD_ROOT%{mingw32_bindir}/pltcl*
-rm -rf $RPM_BUILD_ROOT%{mingw64_bindir}/pltcl*
-rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}
-rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
+rm -rf %{buildroot}%{mingw32_bindir}/pltcl*
+rm -rf %{buildroot}%{mingw64_bindir}/pltcl*
+rm -rf %{buildroot}%{mingw32_datadir}
+rm -rf %{buildroot}%{mingw64_datadir}
 
 
 # Win32
@@ -228,6 +208,10 @@ rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}
 
 
 %changelog
+* Tue Feb 22 2022 Sandro Mani <manisandro@gmail.com> - 11.5-11
+- Add libpathcch to postgresql_libs.patch
+- Modernize spec
+
 * Thu Feb 17 2022 Sandro Mani <manisandro@gmail.com> - 11.5-10
 - Rebuild (openssl)
 
