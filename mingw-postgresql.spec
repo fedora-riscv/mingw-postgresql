@@ -2,7 +2,7 @@
 
 Name:           mingw-postgresql
 Version:        11.5
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        MinGW Windows PostgreSQL library
 
 License:        PostgreSQL
@@ -208,6 +208,9 @@ rm -rf %{buildroot}%{mingw64_datadir}
 
 
 %changelog
+* Fri Mar 25 2022 Sandro Mani <manisandro@gmail.com> - 11.5-12
+- Rebuild with mingw-gcc-12
+
 * Tue Feb 22 2022 Sandro Mani <manisandro@gmail.com> - 11.5-11
 - Add libpathcch to postgresql_libs.patch
 - Modernize spec
