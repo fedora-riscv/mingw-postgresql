@@ -1,76 +1,25 @@
-From 9cf2d3076750f0214c448aaabcbcf7ba5aed6594 Mon Sep 17 00:00:00 2001
-From: Sandro Mani <manisandro@gmail.com>
-Date: Thu, 7 Mar 2019 14:48:57 +0100
-Subject: [PATCH 1/2] Fix import library extension
-
----
- src/Makefile.shlib   |  5 +++--
- src/backend/Makefile | 24 ++++++++++++------------
- 2 files changed, 15 insertions(+), 14 deletions(-)
-
-diff --git a/src/Makefile.shlib b/src/Makefile.shlib
-index 373d73caef..aeaa46e89b 100644
---- a/src/Makefile.shlib
-+++ b/src/Makefile.shlib
-@@ -384,12 +384,12 @@
- # Else we just use --export-all-symbols.
- ifeq (,$(SHLIB_EXPORTS))
- $(shlib): $(OBJS) | $(SHLIB_PREREQS)
--	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=$(stlib)
-+	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=lib$(NAME).dll.a
- else
- DLL_DEFFILE = lib$(NAME)dll.def
- 
- $(shlib): $(OBJS) $(DLL_DEFFILE) | $(SHLIB_PREREQS)
--	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(DLL_DEFFILE) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--out-implib=$(stlib)
-+	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(DLL_DEFFILE) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--out-implib=lib$(NAME).dll.a
- endif
- 
- endif # PORTNAME == cygwin
-@@ -482,7 +482,7 @@
- endif # not cygwin
- endif # not aix
- ifneq (,$(findstring $(PORTNAME),win32 cygwin))
--	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
-+	$(INSTALL_DATA) $< '$(DESTDIR)$(libdir)/lib$(NAME).dll.a'
- endif
- else # no soname
- 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
-diff --git a/src/backend/Makefile b/src/backend/Makefile
-index 478a96db9b..e4f52d0b53 100644
---- a/src/backend/Makefile
-+++ b/src/backend/Makefile
-@@ -69,11 +69,11 @@
+diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3-new/src/backend/Makefile
+--- postgresql-14.3/src/backend/Makefile	2022-05-09 23:14:45.000000000 +0200
++++ postgresql-14.3-new/src/backend/Makefile	2022-11-18 09:51:05.803025453 +0100
+@@ -72,7 +72,7 @@ endif
  ifeq ($(PORTNAME), cygwin)
  
  postgres: $(OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_EX) $(export_dynamic) -Wl,--stack,$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.a $(call expand_subsys,$^) $(LIBS) -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_EX) $(export_dynamic) -Wl,--stack,$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.dll.a $(call expand_subsys,$^) $(LIBS) -o $@
+-	$(CC) $(CFLAGS) $(call expand_subsys,$^) $(LDFLAGS) $(LDFLAGS_EX) $(export_dynamic) -Wl,--stack,$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.a $(LIBS) -o $@
++	$(CC) $(CFLAGS) $(call expand_subsys,$^) $(LDFLAGS) $(LDFLAGS_EX) $(export_dynamic) -Wl,--stack,$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.dll.a $(LIBS) -o $@
  
--# libpostgres.a is actually built in the preceding rule, but we need this to
-+# libpostgres.dll.a is actually built in the preceding rule, but we need this to
+ # libpostgres.a is actually built in the preceding rule, but we need this to
  # ensure it's newer than postgres; see notes in src/backend/parser/Makefile
--libpostgres.a: postgres
-+libpostgres.dll.a: postgres
- 	touch $@
- 
- endif # cygwin
-@@ -82,11 +82,11 @@
+@@ -85,7 +85,7 @@ ifeq ($(PORTNAME), win32)
  LIBS += -lsecur32
  
  postgres: $(OBJS) $(WIN32RES)
--	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_EX) -Wl,--stack=$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.a $(call expand_subsys,$(OBJS)) $(WIN32RES) $(LIBS) -o $@$(X)
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_EX) -Wl,--stack=$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.dll.a $(call expand_subsys,$(OBJS)) $(WIN32RES) $(LIBS) -o $@$(X)
+-	$(CC) $(CFLAGS) $(call expand_subsys,$(OBJS)) $(WIN32RES) $(LDFLAGS) $(LDFLAGS_EX) -Wl,--stack=$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.a $(LIBS) -o $@$(X)
++	$(CC) $(CFLAGS) $(call expand_subsys,$(OBJS)) $(WIN32RES) $(LDFLAGS) $(LDFLAGS_EX) -Wl,--stack=$(WIN32_STACK_RLIMIT) -Wl,--export-all-symbols -Wl,--out-implib=libpostgres.dll.a $(LIBS) -o $@$(X)
  
--# libpostgres.a is actually built in the preceding rule, but we need this to
-+# libpostgres.dll.a is actually built in the preceding rule, but we need this to
+ # libpostgres.a is actually built in the preceding rule, but we need this to
  # ensure it's newer than postgres; see notes in src/backend/parser/Makefile
--libpostgres.a: postgres
-+libpostgres.dll.a: postgres
- 	touch $@
- 
- endif # win32
-@@ -195,12 +195,12 @@
+@@ -197,12 +197,12 @@ distprep:
  install: all installdirs install-bin
  ifeq ($(PORTNAME), cygwin)
  ifeq ($(MAKE_DLL), true)
@@ -85,7 +34,7 @@ index 478a96db9b..e4f52d0b53 100644
  endif
  endif
  	$(MAKE) -C catalog install-data
-@@ -261,12 +261,12 @@
+@@ -262,12 +262,12 @@ ifeq ($(MAKE_EXPORTS), true)
  endif
  ifeq ($(PORTNAME), cygwin)
  ifeq ($(MAKE_DLL), true)
@@ -100,7 +49,7 @@ index 478a96db9b..e4f52d0b53 100644
  endif
  endif
  	$(MAKE) -C catalog uninstall-data
-@@ -286,10 +286,10 @@
+@@ -286,10 +286,10 @@ endif
  clean:
  	rm -f $(LOCALOBJS) postgres$(X) $(POSTGRES_IMP)
  ifeq ($(PORTNAME), cygwin)
@@ -113,6 +62,39 @@ index 478a96db9b..e4f52d0b53 100644
  endif
  
  distclean: clean
--- 
-2.21.0
-
+diff -rupN --no-dereference postgresql-14.3/src/Makefile.shlib postgresql-14.3-new/src/Makefile.shlib
+--- postgresql-14.3/src/Makefile.shlib	2022-05-09 23:14:45.000000000 +0200
++++ postgresql-14.3-new/src/Makefile.shlib	2022-11-18 09:51:05.803025453 +0100
+@@ -347,7 +347,7 @@ ifeq ($(PORTNAME), cygwin)
+ # Cygwin case
+ 
+ $(shlib): $(OBJS) | $(SHLIB_PREREQS)
+-	$(CC) $(CFLAGS)  -shared -o $@ -Wl,--out-implib=$(stlib) $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
++	$(CC) $(CFLAGS)  -shared -o $@ -Wl,--out-implib=lib$(NAME).dll.a $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) $(LDAP_LIBS_BE)
+ 
+ # see notes in src/backend/parser/Makefile  about use of this type of rule
+ $(stlib): $(shlib)
+@@ -371,12 +371,12 @@ $(stlib): $(shlib)
+ # Else we just use --export-all-symbols.
+ ifeq (,$(SHLIB_EXPORTS))
+ $(shlib): $(OBJS) | $(SHLIB_PREREQS)
+-	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=$(stlib)
++	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--export-all-symbols -Wl,--out-implib=lib$(NAME).dll.a
+ else
+ DLL_DEFFILE = lib$(NAME)dll.def
+ 
+ $(shlib): $(OBJS) $(DLL_DEFFILE) | $(SHLIB_PREREQS)
+-	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(DLL_DEFFILE) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--out-implib=$(stlib)
++	$(CC) $(CFLAGS)  -shared -static-libgcc -o $@  $(OBJS) $(DLL_DEFFILE) $(LDFLAGS) $(LDFLAGS_SL) $(SHLIB_LINK) $(LIBS) -Wl,--out-implib=lib$(NAME).dll.a
+ 
+ UC_NAME = $(shell echo $(NAME) | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+ 
+@@ -450,7 +450,7 @@ endif # not win32
+ endif # not cygwin
+ endif # not aix
+ ifneq (,$(findstring $(PORTNAME),win32 cygwin))
+-	$(INSTALL_SHLIB) $< '$(DESTDIR)$(bindir)/$(shlib)'
++	$(INSTALL_DATA) $< '$(DESTDIR)$(libdir)/lib$(NAME).dll.a'
+ endif
+ else # no soname
+ 	$(INSTALL_SHLIB) $< '$(DESTDIR)$(pkglibdir)/$(shlib)'
