@@ -1,7 +1,7 @@
-diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3-new/src/backend/Makefile
---- postgresql-14.3/src/backend/Makefile	2022-05-09 23:14:45.000000000 +0200
-+++ postgresql-14.3-new/src/backend/Makefile	2022-11-18 09:51:05.803025453 +0100
-@@ -72,7 +72,7 @@ endif
+diff -rupN --no-dereference postgresql-15.1/src/backend/Makefile postgresql-15.1-new/src/backend/Makefile
+--- postgresql-15.1/src/backend/Makefile	2022-11-07 22:36:53.000000000 +0100
++++ postgresql-15.1-new/src/backend/Makefile	2023-01-07 15:20:56.248270141 +0100
+@@ -73,7 +73,7 @@ endif
  ifeq ($(PORTNAME), cygwin)
  
  postgres: $(OBJS)
@@ -10,7 +10,7 @@ diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3
  
  # libpostgres.a is actually built in the preceding rule, but we need this to
  # ensure it's newer than postgres; see notes in src/backend/parser/Makefile
-@@ -85,7 +85,7 @@ ifeq ($(PORTNAME), win32)
+@@ -86,7 +86,7 @@ ifeq ($(PORTNAME), win32)
  LIBS += -lsecur32
  
  postgres: $(OBJS) $(WIN32RES)
@@ -19,7 +19,7 @@ diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3
  
  # libpostgres.a is actually built in the preceding rule, but we need this to
  # ensure it's newer than postgres; see notes in src/backend/parser/Makefile
-@@ -197,12 +197,12 @@ distprep:
+@@ -198,12 +198,12 @@ distprep:
  install: all installdirs install-bin
  ifeq ($(PORTNAME), cygwin)
  ifeq ($(MAKE_DLL), true)
@@ -34,7 +34,7 @@ diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3
  endif
  endif
  	$(MAKE) -C catalog install-data
-@@ -262,12 +262,12 @@ ifeq ($(MAKE_EXPORTS), true)
+@@ -263,12 +263,12 @@ ifeq ($(MAKE_EXPORTS), true)
  endif
  ifeq ($(PORTNAME), cygwin)
  ifeq ($(MAKE_DLL), true)
@@ -49,7 +49,7 @@ diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3
  endif
  endif
  	$(MAKE) -C catalog uninstall-data
-@@ -286,10 +286,10 @@ endif
+@@ -287,10 +287,10 @@ endif
  clean:
  	rm -f $(LOCALOBJS) postgres$(X) $(POSTGRES_IMP)
  ifeq ($(PORTNAME), cygwin)
@@ -62,9 +62,9 @@ diff -rupN --no-dereference postgresql-14.3/src/backend/Makefile postgresql-14.3
  endif
  
  distclean: clean
-diff -rupN --no-dereference postgresql-14.3/src/Makefile.shlib postgresql-14.3-new/src/Makefile.shlib
---- postgresql-14.3/src/Makefile.shlib	2022-05-09 23:14:45.000000000 +0200
-+++ postgresql-14.3-new/src/Makefile.shlib	2022-11-18 09:51:05.803025453 +0100
+diff -rupN --no-dereference postgresql-15.1/src/Makefile.shlib postgresql-15.1-new/src/Makefile.shlib
+--- postgresql-15.1/src/Makefile.shlib	2022-11-07 22:36:53.000000000 +0100
++++ postgresql-15.1-new/src/Makefile.shlib	2023-01-07 15:20:56.249270149 +0100
 @@ -347,7 +347,7 @@ ifeq ($(PORTNAME), cygwin)
  # Cygwin case
  
@@ -89,7 +89,7 @@ diff -rupN --no-dereference postgresql-14.3/src/Makefile.shlib postgresql-14.3-n
  
  UC_NAME = $(shell echo $(NAME) | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
  
-@@ -450,7 +450,7 @@ endif # not win32
+@@ -455,7 +455,7 @@ endif # not win32
  endif # not cygwin
  endif # not aix
  ifneq (,$(findstring $(PORTNAME),win32 cygwin))

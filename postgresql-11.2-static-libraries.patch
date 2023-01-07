@@ -1,6 +1,6 @@
-diff -rupN --no-dereference postgresql-14.3/src/Makefile.shlib postgresql-14.3-new/src/Makefile.shlib
---- postgresql-14.3/src/Makefile.shlib	2022-11-18 09:51:06.345025465 +0100
-+++ postgresql-14.3-new/src/Makefile.shlib	2022-11-18 09:51:06.370025465 +0100
+diff -rupN --no-dereference postgresql-15.1/src/Makefile.shlib postgresql-15.1-new/src/Makefile.shlib
+--- postgresql-15.1/src/Makefile.shlib	2023-01-07 15:20:56.810274566 +0100
++++ postgresql-15.1-new/src/Makefile.shlib	2023-01-07 15:20:56.814274598 +0100
 @@ -371,11 +371,17 @@ $(stlib): $(shlib)
  # Else we just use --export-all-symbols.
  ifeq (,$(SHLIB_EXPORTS))

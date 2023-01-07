@@ -1,7 +1,7 @@
-diff -rupN --no-dereference postgresql-14.3/src/interfaces/libpq/Makefile postgresql-14.3-new/src/interfaces/libpq/Makefile
---- postgresql-14.3/src/interfaces/libpq/Makefile	2022-11-18 09:51:07.482025490 +0100
-+++ postgresql-14.3-new/src/interfaces/libpq/Makefile	2022-11-18 09:51:07.486025490 +0100
-@@ -82,10 +82,10 @@ SHLIB_LINK_INTERNAL = -lpgcommon_shlib -
+diff -rupN --no-dereference postgresql-15.1/src/interfaces/libpq/Makefile postgresql-15.1-new/src/interfaces/libpq/Makefile
+--- postgresql-15.1/src/interfaces/libpq/Makefile	2023-01-07 15:20:57.907283198 +0100
++++ postgresql-15.1-new/src/interfaces/libpq/Makefile	2023-01-07 15:20:57.910283222 +0100
+@@ -83,10 +83,10 @@ SHLIB_LINK_INTERNAL = -lpgcommon_shlib -
  ifneq ($(PORTNAME), win32)
  SHLIB_LINK += $(filter -lcrypt -ldes -lcom_err -lcrypto -lk5crypto -lkrb5 -lgssapi_krb5 -lgss -lgssapi -lssl -lsocket -lnsl -lresolv -lintl -lm, $(LIBS)) $(LDAP_LIBS_FE) $(PTHREAD_LIBS)
  else
